@@ -6,7 +6,11 @@ import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.entity.MoveEntityEvent;
 import org.spongepowered.api.event.filter.cause.First;
 import org.spongepowered.api.text.Text;
+<<<<<<< HEAD
 import org.spongepowered.api.text.chat.ChatTypes;
+=======
+import org.spongepowered.api.text.channel.MessageChannel;
+>>>>>>> d9d2a4e0e04ede4be25f609b4ed0de5d85f0786f
 import org.spongepowered.api.text.format.TextColors;
 import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
@@ -24,15 +28,15 @@ public class PlayerMoveListener
 	public void onPlayerMove(MoveEntityEvent event, @First Player player)
 	{
 		if (event.getFromTransform().getLocation().getBlockX() == event.getToTransform().getLocation().getBlockX() && 
-	            event.getFromTransform().getLocation().getBlockZ() == event.getToTransform().getLocation().getBlockZ())
-	    {
-	        return;
-	    }
+				event.getFromTransform().getLocation().getBlockZ() == event.getToTransform().getLocation().getBlockZ())
+		{
+			return;
+		}
 		if (!ConfigHandler.getNode("worlds").getNode(event.getToTransform().getExtent().getName()).getNode("enabled").getBoolean())
 		{
 			return;
 		}
-		
+
 		Location<World> loc = event.getToTransform().getLocation();
 		Nation nation = DataHandler.getNation(loc);
 		Nation lastNationWalkedOn = DataHandler.getLastNationWalkedOn(player.getUniqueId());
@@ -51,29 +55,46 @@ public class PlayerMoveListener
 		}
 		DataHandler.setLastNationWalkedOn(player.getUniqueId(), nation);
 		DataHandler.setLastZoneWalkedOn(player.getUniqueId(), zone);
-		
+
 		Text.Builder builder = Text.builder("~ ").color(TextColors.GRAY);
-		
+
 		builder.append((nation == null) ? Text.of(TextColors.DARK_GREEN, LanguageHandler.IA) : Utils.nationClickable(TextColors.DARK_AQUA, nation.getName()));
-		builder.append(Text.of(TextColors.GRAY, " - "));
+		if (nation != null && !nation.isAdmin())
+		{
+			builder.append(Text.of(TextColors.GRAY, " - "));
+			builder.append(Text.of(TextColors.YELLOW, DataHandler.getCitizenTitle(nation.getPresident()), " ", Utils.citizenClickable(TextColors.YELLOW, DataHandler.getPlayerName(nation.getPresident()))));
+		}
 		if (zone != null)
 		{
-			builder.append(Utils.zoneClickable(TextColors.GREEN, zone.getName()));
+			builder.append(Text.of(TextColors.GRAY, " ~ "));
+			if (zone.isNamed())
+			{
+				builder.append(Utils.zoneClickable(TextColors.GREEN, zone.getName()));
+				builder.append(Text.of(TextColors.GRAY, " - "));
+			}
+			if (zone.isOwned())
+			{
+				builder.append(Utils.citizenClickable(TextColors.YELLOW, DataHandler.getPlayerName(zone.getOwner())));
+				builder.append(Text.of(TextColors.GRAY, " - "));
+			}
 			if (zone.isForSale())
 			{
 				builder.append(
-						Text.of(TextColors.GRAY, " - "),
 						Text.of(TextColors.YELLOW, "["),
 						Utils.formatPrice(TextColors.YELLOW, zone.getPrice()),
-						Text.of(TextColors.YELLOW, "]")
-				);
+						Text.of(TextColors.YELLOW, "]"),
+						Text.of(TextColors.GRAY, " - ")
+						);
 			}
+		}
+		else
+		{
 			builder.append(Text.of(TextColors.GRAY, " - "));
 		}
-		
 		builder.append((DataHandler.getFlag("pvp", loc)) ? Text.of(TextColors.DARK_RED, "(PvP)") : Text.of(TextColors.DARK_GREEN, "(No PvP)"));
 		builder.append(Text.of(TextColors.GRAY, " ~"));
 
+<<<<<<< HEAD
 		if (ConfigHandler.getNode("others", "useTitleForNationEnter").getBoolean())
 		{
 			player.sendMessage(ChatTypes.ACTION_BAR, builder.build());
@@ -82,5 +103,9 @@ public class PlayerMoveListener
 		{
 			player.sendMessage(builder.build());
 		}
+=======
+		player.sendMessage(builder.build());
+		MessageChannel.TO_CONSOLE.send(Text.of(player.getName(), " entered area ", builder.build()));
+>>>>>>> d9d2a4e0e04ede4be25f609b4ed0de5d85f0786f
 	}
 }

@@ -56,7 +56,11 @@ public class NationCreateExecutor implements CommandExecutor
 				src.sendMessage(Text.of(TextColors.RED, LanguageHandler.EL));
 				return CommandResult.success();
 			}
+<<<<<<< HEAD
 			if (!nationName.matches("[a-zA-Z0-9\\._-]{1,}"))
+=======
+			if (!nationName.matches("[\\p{Alnum}\\p{IsIdeographic}\\p{IsLetter}\"_\"]*"))
+>>>>>>> d9d2a4e0e04ede4be25f609b4ed0de5d85f0786f
 			{
 				src.sendMessage(Text.of(TextColors.RED, LanguageHandler.EM));
 				return CommandResult.success();
@@ -133,8 +137,8 @@ public class NationCreateExecutor implements CommandExecutor
 			optNationAccount.get().setBalance(NationsPlugin.getEcoService().getDefaultCurrency(), BigDecimal.ZERO, NationsPlugin.getCause());
 			DataHandler.addNation(nation);
 			DataHandler.addToWorldChunks(nation);
-			MessageChannel.TO_ALL.send(Text.of(TextColors.AQUA, LanguageHandler.EP.replaceAll("\\{PLAYER\\}", player.getName()).replaceAll("\\{NATION\\}", nationName)));
-			src.sendMessage(Text.of(TextColors.GREEN, LanguageHandler.EQ.replaceAll("\\{NATION\\}", nationName)));
+			MessageChannel.TO_ALL.send(Text.of(TextColors.AQUA, LanguageHandler.EP.replaceAll("\\{PLAYER\\}", player.getName()).replaceAll("\\{NATION\\}", nation.getName())));
+			src.sendMessage(Text.of(TextColors.GREEN, LanguageHandler.EQ.replaceAll("\\{NATION\\}", nation.getName())));
 		}
 		else
 		{

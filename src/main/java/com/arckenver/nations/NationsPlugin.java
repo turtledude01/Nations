@@ -30,7 +30,54 @@ import com.arckenver.nations.cmdelement.CitizenNameElement;
 import com.arckenver.nations.cmdelement.NationNameElement;
 import com.arckenver.nations.cmdelement.PlayerNameElement;
 import com.arckenver.nations.cmdelement.WorldNameElement;
-import com.arckenver.nations.cmdelement.ZoneNameElement;
+import com.arckenver.nations.cmdexecutor.nation.NationBuyextraExecutor;
+import com.arckenver.nations.cmdexecutor.nation.NationChatExecutor;
+import com.arckenver.nations.cmdexecutor.nation.NationCitizenExecutor;
+import com.arckenver.nations.cmdexecutor.nation.NationClaimExecutor;
+import com.arckenver.nations.cmdexecutor.nation.NationClaimOutpostExecutor;
+import com.arckenver.nations.cmdexecutor.nation.NationCostExecutor;
+import com.arckenver.nations.cmdexecutor.nation.NationCreateExecutor;
+import com.arckenver.nations.cmdexecutor.nation.NationDelspawnExecutor;
+import com.arckenver.nations.cmdexecutor.nation.NationDepositExecutor;
+import com.arckenver.nations.cmdexecutor.nation.NationHelpExecutor;
+import com.arckenver.nations.cmdexecutor.nation.NationFlagExecutor;
+import com.arckenver.nations.cmdexecutor.nation.NationHereExecutor;
+import com.arckenver.nations.cmdexecutor.nation.NationHomeExecutor;
+import com.arckenver.nations.cmdexecutor.nation.NationInfoExecutor;
+import com.arckenver.nations.cmdexecutor.nation.NationInviteExecutor;
+import com.arckenver.nations.cmdexecutor.nation.NationJoinExecutor;
+import com.arckenver.nations.cmdexecutor.nation.NationKickExecutor;
+import com.arckenver.nations.cmdexecutor.nation.NationLeaveExecutor;
+import com.arckenver.nations.cmdexecutor.nation.NationListExecutor;
+import com.arckenver.nations.cmdexecutor.nation.NationMinisterExecutor;
+import com.arckenver.nations.cmdexecutor.nation.NationPermExecutor;
+import com.arckenver.nations.cmdexecutor.nation.NationResignExecutor;
+import com.arckenver.nations.cmdexecutor.nation.NationSetnameExecutor;
+import com.arckenver.nations.cmdexecutor.nation.NationSetspawnExecutor;
+import com.arckenver.nations.cmdexecutor.nation.NationSpawnExecutor;
+import com.arckenver.nations.cmdexecutor.nation.NationTaxesExecutor;
+import com.arckenver.nations.cmdexecutor.nation.NationUnclaimExecutor;
+import com.arckenver.nations.cmdexecutor.nation.NationWithdrawExecutor;
+import com.arckenver.nations.cmdexecutor.nation.NationVisitExecutor;
+import com.arckenver.nations.cmdexecutor.nationadmin.NationadminClaimExecutor;
+import com.arckenver.nations.cmdexecutor.nationadmin.NationadminCreateExecutor;
+import com.arckenver.nations.cmdexecutor.nationadmin.NationadminDeleteExecutor;
+import com.arckenver.nations.cmdexecutor.nationadmin.NationadminEcoExecutor;
+import com.arckenver.nations.cmdexecutor.nationadmin.NationadminExecutor;
+import com.arckenver.nations.cmdexecutor.nationadmin.NationadminExtraExecutor;
+import com.arckenver.nations.cmdexecutor.nationadmin.NationadminExtraplayerExecutor;
+import com.arckenver.nations.cmdexecutor.nationadmin.NationadminExtraspawnExecutor;
+import com.arckenver.nations.cmdexecutor.nationadmin.NationadminExtraspawnplayerExecutor;
+import com.arckenver.nations.cmdexecutor.nationadmin.NationadminFlagExecutor;
+import com.arckenver.nations.cmdexecutor.nationadmin.NationadminForcejoinExecutor;
+import com.arckenver.nations.cmdexecutor.nationadmin.NationadminForceleaveExecutor;
+import com.arckenver.nations.cmdexecutor.nationadmin.NationadminForceupkeepExecutor;
+import com.arckenver.nations.cmdexecutor.nationadmin.NationadminPermExecutor;
+import com.arckenver.nations.cmdexecutor.nationadmin.NationadminReloadExecutor;
+import com.arckenver.nations.cmdexecutor.nationadmin.NationadminSetnameExecutor;
+import com.arckenver.nations.cmdexecutor.nationadmin.NationadminSetpresExecutor;
+import com.arckenver.nations.cmdexecutor.nationadmin.NationadminSpyExecutor;
+import com.arckenver.nations.cmdexecutor.nationadmin.NationadminUnclaimExecutor;
 import com.arckenver.nations.cmdexecutor.nationworld.NationworldDisableExecutor;
 import com.arckenver.nations.cmdexecutor.nationworld.NationworldEnableExecutor;
 import com.arckenver.nations.cmdexecutor.nationworld.NationworldExecutor;
@@ -51,6 +98,16 @@ import com.arckenver.nations.cmdexecutor.zone.ZonePermExecutor;
 import com.arckenver.nations.cmdexecutor.zone.ZoneRenameExecutor;
 import com.arckenver.nations.cmdexecutor.zone.ZoneSellExecutor;
 import com.arckenver.nations.cmdexecutor.zone.ZoneSetownerExecutor;
+import com.arckenver.nations.cmdexecutor.zone.ZoneUnsellExecutor;
+import com.arckenver.nations.listener.BuildPermListener;
+import com.arckenver.nations.listener.ExplosionListener;
+import com.arckenver.nations.listener.FireListener;
+import com.arckenver.nations.listener.GoldenAxeListener;
+import com.arckenver.nations.listener.InteractPermListener;
+import com.arckenver.nations.listener.MobSpawningListener;
+import com.arckenver.nations.listener.PlayerConnectionListener;
+import com.arckenver.nations.listener.PlayerMoveListener;
+import com.arckenver.nations.listener.PvpListener;
 import com.arckenver.nations.object.Nation;
 import com.arckenver.nations.service.NationsService;
 import com.arckenver.nations.task.TaxesCollectRunnable;
@@ -105,6 +162,13 @@ public class NationsPlugin
 				.executor(new NationadminReloadExecutor())
 				.build();
 		
+		CommandSpec nationadminForceupkeepCmd = CommandSpec.builder()
+				.description(Text.of(""))
+				.permission("nations.command.nationadmin.forceupkeep")
+				.arguments()
+				.executor(new NationadminForceupkeepExecutor())
+				.build();
+		
 		CommandSpec nationadminCreateCmd = CommandSpec.builder()
 				.description(Text.of(""))
 				.permission("nations.command.nationadmin.create")
@@ -117,6 +181,13 @@ public class NationsPlugin
 				.permission("nations.command.nationadmin.claim")
 				.arguments(GenericArguments.optional(GenericArguments.string(Text.of("nation"))))
 				.executor(new NationadminClaimExecutor())
+				.build();
+		
+		CommandSpec nationadminUnclaimCmd = CommandSpec.builder()
+				.description(Text.of(""))
+				.permission("nations.command.nationadmin.unclaim")
+				.arguments(GenericArguments.optional(GenericArguments.string(Text.of("nation"))))
+				.executor(new NationadminUnclaimExecutor())
 				.build();
 		
 		CommandSpec nationadminSetpresCmd = CommandSpec.builder()
@@ -168,6 +239,66 @@ public class NationsPlugin
 				.executor(new NationadminEcoExecutor())
 				.build();
 		
+		CommandSpec nationadminExtraCmd = CommandSpec.builder()
+				.description(Text.of(""))
+				.permission("nations.command.nationadmin.extra")
+				.arguments(
+						GenericArguments.optional(GenericArguments.choices(Text.of("give|take|set"),
+								ImmutableMap.<String, String> builder()
+										.put("give", "give")
+										.put("take", "take")
+										.put("set", "set")
+										.build())),
+						GenericArguments.optional(new NationNameElement(Text.of("nation"))),
+						GenericArguments.optional(GenericArguments.integer(Text.of("amount"))))
+				.executor(new NationadminExtraExecutor())
+				.build();
+		
+		CommandSpec nationadminExtraplayerCmd = CommandSpec.builder()
+				.description(Text.of(""))
+				.permission("nations.command.nationadmin.extraplayer")
+				.arguments(
+						GenericArguments.optional(GenericArguments.choices(Text.of("give|take|set"),
+								ImmutableMap.<String, String> builder()
+										.put("give", "give")
+										.put("take", "take")
+										.put("set", "set")
+										.build())),
+						GenericArguments.optional(new PlayerNameElement(Text.of("player"))),
+						GenericArguments.optional(GenericArguments.integer(Text.of("amount"))))
+				.executor(new NationadminExtraplayerExecutor())
+				.build();
+		
+		CommandSpec nationadminExtraspawnCmd = CommandSpec.builder()
+				.description(Text.of(""))
+				.permission("nations.command.nationadmin.extraspawn")
+				.arguments(
+						GenericArguments.optional(GenericArguments.choices(Text.of("give|take|set"),
+								ImmutableMap.<String, String> builder()
+										.put("give", "give")
+										.put("take", "take")
+										.put("set", "set")
+										.build())),
+						GenericArguments.optional(new NationNameElement(Text.of("nation"))),
+						GenericArguments.optional(GenericArguments.integer(Text.of("amount"))))
+				.executor(new NationadminExtraspawnExecutor())
+				.build();
+		
+		CommandSpec nationadminExtraspawnplayerCmd = CommandSpec.builder()
+				.description(Text.of(""))
+				.permission("nations.command.nationadmin.extraspawnplayer")
+				.arguments(
+						GenericArguments.optional(GenericArguments.choices(Text.of("give|take|set"),
+								ImmutableMap.<String, String> builder()
+										.put("give", "give")
+										.put("take", "take")
+										.put("set", "set")
+										.build())),
+						GenericArguments.optional(new PlayerNameElement(Text.of("player"))),
+						GenericArguments.optional(GenericArguments.integer(Text.of("amount"))))
+				.executor(new NationadminExtraspawnplayerExecutor())
+				.build();
+		
 		CommandSpec nationadminDeleteCmd = CommandSpec.builder()
 				.description(Text.of(""))
 				.permission("nations.command.nationadmin.delete")
@@ -209,29 +340,36 @@ public class NationsPlugin
 						GenericArguments.optional(GenericArguments.bool(Text.of("bool"))))
 				.executor(new NationadminPermExecutor())
 				.build();
-		CommandSpec nationadminForceupkeepCmd = CommandSpec.builder()
-				.description(Text.of(""))
-				.permission("nations.command.nationadmin.forceupkeep")
-				.executor(new NationadminForceupkeepExecutor())
-				.build();
 	
+		CommandSpec nationadminSpyCmd = CommandSpec.builder()
+				.description(Text.of(""))
+				.permission("nations.command.nationadmin.spy")
+				.arguments()
+				.executor(new NationadminSpyExecutor())
+				.build();
 		
 		CommandSpec nationadminCmd = CommandSpec.builder()
 				.description(Text.of(""))
 				.permission("nations.command.nationadmin.execute")
 				.executor(new NationadminExecutor())
 				.child(nationadminReloadCmd, "reload")
+				.child(nationadminForceupkeepCmd, "forceupkeep")
 				.child(nationadminCreateCmd, "create")
 				.child(nationadminClaimCmd, "claim")
+				.child(nationadminUnclaimCmd, "unclaim")
 				.child(nationadminSetpresCmd, "setpres", "setpresident")
-				.child(nationadminSetnameCmd, "setname")
+				.child(nationadminSetnameCmd, "setname", "rename")
 				.child(nationadminForcejoinCmd, "forcejoin")
 				.child(nationadminForceleaveCmd, "forceleave")
 				.child(nationadminEcoCmd, "eco")
 				.child(nationadminDeleteCmd, "delete")
 				.child(nationadminFlagCmd, "flag")
 				.child(nationadminPermCmd, "perm")
-				.child(nationadminForceupkeepCmd, "forceupkeep")
+				.child(nationadminSpyCmd, "spy", "spychat")
+				.child(nationadminExtraCmd, "extra")
+				.child(nationadminExtraplayerCmd, "extraplayer")
+				.child(nationadminExtraspawnCmd, "extraspawn")
+				.child(nationadminExtraspawnplayerCmd, "extraspawnplayer")
 				.build();
 
 		CommandSpec nationInfoCmd = CommandSpec.builder()
@@ -247,7 +385,21 @@ public class NationsPlugin
 				.arguments()
 				.executor(new NationHereExecutor())
 				.build();
-
+		
+		CommandSpec nationHelpCmd = CommandSpec.builder()
+				.description(Text.of(""))
+				.permission("nations.command.nation.help")
+				.arguments()
+				.executor(new NationHelpExecutor())
+				.build();
+		
+		CommandSpec nationCostCmd = CommandSpec.builder()
+				.description(Text.of(""))
+				.permission("nations.command.nation.cost")
+				.arguments()
+				.executor(new NationCostExecutor())
+				.build();
+		
 		CommandSpec nationListCmd = CommandSpec.builder()
 				.description(Text.of(""))
 				.permission("nations.command.nation.list")
@@ -354,6 +506,13 @@ public class NationsPlugin
 				.executor(new NationHomeExecutor())
 				.build();
 
+		CommandSpec nationSetnameCmd = CommandSpec.builder()
+				.description(Text.of(""))
+				.permission("nations.command.nation.setname")
+				.arguments(GenericArguments.optional(GenericArguments.string(Text.of("name"))))
+				.executor(new NationSetnameExecutor())
+				.build();
+		
 		CommandSpec nationSetspawnCmd = CommandSpec.builder()
 				.description(Text.of(""))
 				.permission("nations.command.nation.setspawn")
@@ -438,7 +597,7 @@ public class NationsPlugin
 		CommandSpec nationChatCmd = CommandSpec.builder()
 				.description(Text.of(""))
 				.permission("nations.command.nation.chat")
-				.arguments()
+				.arguments(GenericArguments.optional(GenericArguments.remainingJoinedStrings(Text.of("msg"))))
 				.executor(new NationChatExecutor())
 				.build();
 		
@@ -451,18 +610,14 @@ public class NationsPlugin
 				.executor(new NationVisitExecutor())
 				.build();
 
-		CommandSpec nationCostCmd = CommandSpec.builder()
-				.description(Text.of(""))
-				.permission("nations.command.nation.costs")
-				.executor(new NationCostExecutor())
-				.build();
-
 		CommandSpec nationCmd = CommandSpec.builder()
 				.description(Text.of(""))
 				.permission("nations.command.nation.execute")
-				.executor(new NationExecutor())
+				.executor(new NationInfoExecutor())
 				.child(nationInfoCmd, "info")
+				.child(nationHelpCmd, "help", "?")
 				.child(nationHereCmd, "here", "h")
+				.child(nationCostCmd, "cost", "costs", "price", "prices", "fare", "fares")
 				.child(nationListCmd, "list", "l")
 				.child(nationCitizenCmd, "citizen", "whois")
 				.child(nationCreateCmd, "create", "new")
@@ -477,6 +632,7 @@ public class NationsPlugin
 				.child(nationResignCmd, "resign")
 				.child(nationSpawnCmd, "spawn")
 				.child(nationHomeCmd, "home")
+				.child(nationSetnameCmd, "setname", "rename")
 				.child(nationSetspawnCmd, "setspawn")
 				.child(nationDelspawnCmd, "delspawn")
 				.child(nationBuyextraCmd, "buyextra")
@@ -487,7 +643,6 @@ public class NationsPlugin
 				.child(nationChatCmd, "chat", "c")
 				.child(nationVisitCmd, "visit")
 				.child(nationTagCmd, "tag")
-				.child(nationCostCmd, "cost")
 				.build();
 
 		CommandSpec zoneInfoCmd = CommandSpec.builder()
@@ -516,7 +671,7 @@ public class NationsPlugin
 		CommandSpec zoneDeleteCmd = CommandSpec.builder()
 				.description(Text.of(""))
 				.permission("nations.command.zone.delete")
-				.arguments(GenericArguments.optional(new ZoneNameElement(Text.of("zone"))))
+				.arguments()
 				.executor(new ZoneDeleteExecutor())
 				.build();
 
@@ -600,6 +755,13 @@ public class NationsPlugin
 				.arguments()
 				.executor(new ZoneBuyExecutor())
 				.build();
+		
+		CommandSpec zoneUnsellCmd = CommandSpec.builder()
+				.description(Text.of(""))
+				.permission("nations.command.zone.unsell")
+				.arguments()
+				.executor(new ZoneUnsellExecutor())
+				.build();
 
 		CommandSpec zoneCmd = CommandSpec.builder()
 				.description(Text.of(""))
@@ -616,6 +778,7 @@ public class NationsPlugin
 				.child(zonePermCmd, "perm")
 				.child(zoneFlagCmd, "flag")
 				.child(zoneSellCmd, "sell", "forsale", "fs")
+				.child(zoneUnsellCmd, "unsell", "notforsale", "nfs")
 				.child(zoneBuyCmd, "buy", "claim")
 				.build();
 
@@ -690,6 +853,7 @@ public class NationsPlugin
 		Sponge.getCommandManager().register(this, nationCmd, "nation", "n", "nations");
 		Sponge.getCommandManager().register(this, zoneCmd, "zone", "z");
 		Sponge.getCommandManager().register(this, nationworldCmd, "nationworld", "nw");
+		Sponge.getCommandManager().register(this, nationChatCmd, "nationchat", "nc");
 
 		Sponge.getEventManager().registerListeners(this, new PlayerConnectionListener());
 		Sponge.getEventManager().registerListeners(this, new PlayerMoveListener());
