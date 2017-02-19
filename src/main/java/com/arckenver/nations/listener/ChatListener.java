@@ -68,12 +68,8 @@ public class ChatListener
 		}
 		else if (chan instanceof NationMessageChannel)
 		{
-<<<<<<< HEAD
 			e.setMessage(Text.of(TextColors.WHITE, "{", TextColors.YELLOW, tag, TextColors.WHITE,  "} "), Text.of(TextColors.YELLOW, e.getMessage()));
-=======
-			e.setMessage(Text.of(TextColors.WHITE, " {", TextColors.YELLOW, nation.getName(), TextColors.WHITE,  "} "), Text.of(TextColors.YELLOW, e.getMessage()));
 			DataHandler.getSpyChannel().send(p, Text.of(TextColors.WHITE, " [", TextColors.RED, "SpyChat", TextColors.WHITE,  "]", TextColors.RESET, e.getMessage()));
->>>>>>> d9d2a4e0e04ede4be25f609b4ed0de5d85f0786f
 		}
 	}
 }

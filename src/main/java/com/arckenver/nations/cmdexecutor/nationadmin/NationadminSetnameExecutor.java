@@ -36,7 +36,7 @@ public class NationadminSetnameExecutor implements CommandExecutor
 			src.sendMessage(Text.of(TextColors.RED, LanguageHandler.EL));
 			return CommandResult.success();
 		}
-		if (!newName.matches("[\\p{Alnum}\\p{IsIdeographic}\\p{IsLetter}\"_\"]*")
+		if (!newName.matches("[\\p{Alnum}\\p{IsIdeographic}\\p{IsLetter}\"_\"]*"))
 		{
 			src.sendMessage(Text.of(TextColors.RED, LanguageHandler.EM));
 			return CommandResult.success();

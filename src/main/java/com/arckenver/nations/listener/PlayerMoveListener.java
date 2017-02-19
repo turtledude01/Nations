@@ -6,11 +6,8 @@ import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.entity.MoveEntityEvent;
 import org.spongepowered.api.event.filter.cause.First;
 import org.spongepowered.api.text.Text;
-<<<<<<< HEAD
 import org.spongepowered.api.text.chat.ChatTypes;
-=======
 import org.spongepowered.api.text.channel.MessageChannel;
->>>>>>> d9d2a4e0e04ede4be25f609b4ed0de5d85f0786f
 import org.spongepowered.api.text.format.TextColors;
 import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
@@ -94,7 +91,6 @@ public class PlayerMoveListener
 		builder.append((DataHandler.getFlag("pvp", loc)) ? Text.of(TextColors.DARK_RED, "(PvP)") : Text.of(TextColors.DARK_GREEN, "(No PvP)"));
 		builder.append(Text.of(TextColors.GRAY, " ~"));
 
-<<<<<<< HEAD
 		if (ConfigHandler.getNode("others", "useTitleForNationEnter").getBoolean())
 		{
 			player.sendMessage(ChatTypes.ACTION_BAR, builder.build());
@@ -103,9 +99,6 @@ public class PlayerMoveListener
 		{
 			player.sendMessage(builder.build());
 		}
-=======
-		player.sendMessage(builder.build());
 		MessageChannel.TO_CONSOLE.send(Text.of(player.getName(), " entered area ", builder.build()));
->>>>>>> d9d2a4e0e04ede4be25f609b4ed0de5d85f0786f
 	}
 }

@@ -25,12 +25,7 @@ public class ZoneRenameExecutor implements CommandExecutor
 			{
 				zoneName = ctx.<String>getOne("name").get();
 			}
-<<<<<<< HEAD
-			String zoneName = ctx.<String>getOne("name").get();
-			if (!zoneName.matches("[a-zA-Z0-9\\._-]{1,30}"))
-=======
 			if (zoneName != null && !zoneName.matches("[\\p{Alnum}\\p{IsIdeographic}\\p{IsLetter}\"_\"]*{1,30}"))
->>>>>>> d9d2a4e0e04ede4be25f609b4ed0de5d85f0786f
 			{
 				src.sendMessage(Text.of(TextColors.RED, LanguageHandler.FY
 						.replaceAll("\\{MIN\\}", "1")
