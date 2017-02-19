@@ -1,5 +1,6 @@
 package com.arckenver.nations.cmdexecutor.zone;
 
+import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
@@ -14,7 +15,7 @@ import com.arckenver.nations.LanguageHandler;
 import com.arckenver.nations.object.Nation;
 import com.arckenver.nations.object.Zone;
 
-public class ZoneDeleteExecutor implements CommandExecutor
+public class ZoneUnsellExecutor implements CommandExecutor
 {
 	public CommandResult execute(CommandSource src, CommandContext ctx) throws CommandException
 	{
@@ -30,18 +31,21 @@ public class ZoneDeleteExecutor implements CommandExecutor
 			Zone zone = nation.getZone(player.getLocation());
 			if (zone == null)
 			{
-				src.sendMessage(Text.of(TextColors.RED, LanguageHandler.CF));
+				src.sendMessage(Text.of(TextColors.RED, LanguageHandler.GX));
 				return CommandResult.success();
 			}
-			String zoneName = zone.getName();
-			if (!nation.isStaff(player.getUniqueId()))
+			if ((!zone.isOwner(player.getUniqueId()) || nation.isAdmin()) && !nation.isStaff(player.getUniqueId()))
 			{
-				src.sendMessage(Text.of(TextColors.RED, LanguageHandler.CK));
+				src.sendMessage(Text.of(TextColors.RED, LanguageHandler.GV));
 				return CommandResult.success();
 			}
-			nation.removeZone(zone.getUUID());
+			zone.setPrice(null);
 			DataHandler.saveNation(nation.getUUID());
-			src.sendMessage(Text.of(TextColors.GREEN, LanguageHandler.HM.replaceAll("\\{ZONE\\}", zoneName)));
+			nation.getCitizens().forEach(
+				uuid -> Sponge.getServer().getPlayer(uuid).ifPresent(
+						p -> {			
+							src.sendMessage(Text.of(TextColors.AQUA, LanguageHandler.LJ.replaceAll("\\{PLAYER\\}",  player.getName()).replaceAll("\\{ZONE\\}", zone.getName())));
+						}));
 		}
 		else
 		{

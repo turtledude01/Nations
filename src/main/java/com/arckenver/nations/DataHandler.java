@@ -15,9 +15,12 @@ import java.util.stream.Collectors;
 
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.player.Player;
+import org.spongepowered.api.text.Text;
+import org.spongepowered.api.text.channel.MessageChannel;
 import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
 
+import com.arckenver.nations.channel.NationMessageChannel;
 import com.arckenver.nations.object.Nation;
 import com.arckenver.nations.object.Point;
 import com.arckenver.nations.object.Rect;
@@ -43,6 +46,7 @@ public class DataHandler
 	private static Hashtable<UUID, Point> secondPoints;
 	private static ArrayList<Request> inviteRequests;
 	private static ArrayList<Request> joinRequests;
+	private static NationMessageChannel spyChannel;
 
 	public static void init(File rootDir)
 	{
@@ -82,6 +86,7 @@ public class DataHandler
 		secondPoints = new Hashtable<UUID, Point>();
 		inviteRequests = new ArrayList<Request>();
 		joinRequests = new ArrayList<Request>();
+		spyChannel = new NationMessageChannel();
 	}
 
 	public static void save()
@@ -91,6 +96,11 @@ public class DataHandler
 			saveNation(uuid);
 		}
 
+	}
+	
+	public static NationMessageChannel getSpyChannel()
+	{
+		return spyChannel;
 	}
 
 	// nations
@@ -110,7 +120,7 @@ public class DataHandler
 	{
 		for (Nation nation : nations.values())
 		{
-			if (nation.getName().equalsIgnoreCase(name))
+			if (nation.getRealName().equalsIgnoreCase(name))
 			{
 				return nation;
 			}
@@ -160,8 +170,8 @@ public class DataHandler
 	{
 		Nation oldNation = getNation(uuid);
 		if (oldNation != null) {
-			NationsPlugin.getLogger().info("Removing Nation " + uuid + ": ");
-			NationsPlugin.getLogger().info(Utils.formatNationDescription(oldNation, Utils.CLICKER_ADMIN).toPlain());
+			MessageChannel.TO_CONSOLE.send(Text.of("Removing Nation " + uuid + ": "));
+			MessageChannel.TO_CONSOLE.send(Utils.formatNationDescription(oldNation, Utils.CLICKER_ADMIN));
 		}
 		nations.remove(uuid);
 

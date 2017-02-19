@@ -6,6 +6,7 @@ import java.io.IOException;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
+import ninja.leaping.configurate.objectmapping.Setting;
 
 public class LanguageHandler
 {
@@ -108,6 +109,11 @@ public class LanguageHandler
 	public static String DS;
 	public static String DT;
 	public static String DU;
+	public static String DV;
+	public static String DW;
+	public static String DX;
+	public static String DZ;
+	public static String DY;
 	public static String EA;
 	public static String EB;
 	public static String EC;
@@ -254,7 +260,12 @@ public class LanguageHandler
 	public static String LF;
 	public static String LG;
 	public static String LH;
-	public static String MA;
+	public static String LI;
+	public static String LJ;
+
+	//my custom commands lang handlers
+	public static String ZZZ;
+	public static String ZZX;
 	
 	private static File languageFile;
 	private static ConfigurationLoader<CommentedConfigurationNode> languageManager;
@@ -349,7 +360,7 @@ public class LanguageHandler
 		defaultLanguage.getNode("CF").setValue("Invalid zone name");
 		defaultLanguage.getNode("CG").setValue("You must specify nation name");
 		defaultLanguage.getNode("CH").setValue("You must specify player name");
-		defaultLanguage.getNode("CI").setValue("You must be in a nation to perform that command");
+		defaultLanguage.getNode("CI").setValue("You must be in a nation to perform that command, type /n ? for more help");
 		defaultLanguage.getNode("CJ").setValue("You must be president of your nation to perform that command");
 		defaultLanguage.getNode("CK").setValue("You must be president or minister of your nation to perform that command");
 		defaultLanguage.getNode("CL").setValue("A new day is here ! Nations will now have to pay their upkeeps");
@@ -387,8 +398,13 @@ public class LanguageHandler
 		defaultLanguage.getNode("DQ").setValue("You must be standing in a nation to perform that command");
 		defaultLanguage.getNode("DR").setValue("You do not have permission to buy a zone in this nation");
 		defaultLanguage.getNode("DS").setValue("rename zone");
-		defaultLanguage.getNode("DT").setValue("You are now speaking in your nations's private channel");
+		defaultLanguage.getNode("DT").setValue("You are now speaking in your nation's private channel");
 		defaultLanguage.getNode("DU").setValue("You are no longer speaking in your nation's private channel");
+		defaultLanguage.getNode("DV").setValue("You are now spying nations' private channels");
+		defaultLanguage.getNode("DW").setValue("You are no longer spying nations' private channels");
+		defaultLanguage.getNode("DX").setValue("spy on nations' private channels");
+		defaultLanguage.getNode("DY").setValue("display nation prices");
+		defaultLanguage.getNode("DZ").setValue("force nation upkeep script to run");
 		
 		defaultLanguage.getNode("EA").setValue("You must select a region with a golden axe first (right/left click)");
 		defaultLanguage.getNode("EB").setValue("Your selection must be adjacent to your region");
@@ -490,9 +506,9 @@ public class LanguageHandler
 		defaultLanguage.getNode("HU").setValue("Teleport will start in 10 seconds");
 		defaultLanguage.getNode("HV").setValue("No spawn named 'home' found. Make one with /n setspawn home");
 		defaultLanguage.getNode("HW").setValue("if you have a spawn named 'home', tp to it");
-		defaultLanguage.getNode("HX").setValue("Change Nation tag");
-		defaultLanguage.getNode("HY").setValue("Nation tag set to ");
-		defaultLanguage.getNode("HZ").setValue("Tag must be 2 to 4 letters or numbers");
+		defaultLanguage.getNode("HX").setValue("Unnamed");
+		defaultLanguage.getNode("HY").setValue("manage extra blocks");
+		defaultLanguage.getNode("HZ").setValue("manage extra blocks using player name");
 
 		defaultLanguage.getNode("IA").setValue("Wilderness");
 		defaultLanguage.getNode("IB").setValue("Nation");
@@ -531,17 +547,21 @@ public class LanguageHandler
 
 		defaultLanguage.getNode("KA").setValue("First position set to {COORD}");
 		defaultLanguage.getNode("KB").setValue("Second position set to {COORD}");
+		
+		defaultLanguage.getNode("LA").setValue("Nation prices");
+		defaultLanguage.getNode("LB").setValue("Nation creation");
+		defaultLanguage.getNode("LC").setValue("Outpost creation");
+		defaultLanguage.getNode("LD").setValue("Upkeep per citizen");
+		defaultLanguage.getNode("LE").setValue("Price per block claimed");
+		defaultLanguage.getNode("LF").setValue("Price per extra block");
+		defaultLanguage.getNode("LG").setValue("manage extra spawns");
+		defaultLanguage.getNode("LH").setValue("manage extra spawns using player name");
+		defaultLanguage.getNode("LI").setValue("unclaims for admin nation");
+		defaultLanguage.getNode("LJ").setValue("{PLAYER} made zone {ZONE} not for sale");
 
-		defaultLanguage.getNode("LA").setValue("Price per block");
-		defaultLanguage.getNode("LB").setValue("Extra block price");
-		defaultLanguage.getNode("LC").setValue("New nation price");
-		defaultLanguage.getNode("LD").setValue("Outpost price");
-		defaultLanguage.getNode("LE").setValue("Refund price");
-		defaultLanguage.getNode("LF").setValue("Upkeep per block");
-		defaultLanguage.getNode("LG").setValue("Upkeep per player");
-		defaultLanguage.getNode("LH").setValue("See all prices");
-
-		defaultLanguage.getNode("MA").setValue("Force upkeep to be charged");
+		//My custom langs
+		defaultLanguage.getNode("ZZZ").setValue("nation tag must be 2-4 letters or numbers");
+		defaultLanguage.getNode("ZZX").setValue("Nation tag set to ");
 	}
 	
 	public static void load()
@@ -645,6 +665,11 @@ public class LanguageHandler
 		DS = getOrDefault("DS");
 		DT = getOrDefault("DT");
 		DU = getOrDefault("DU");
+		DV = getOrDefault("DV");
+		DW = getOrDefault("DW");
+		DX = getOrDefault("DX");
+		DY = getOrDefault("DY");
+		DZ = getOrDefault("DZ");
 		EA = getOrDefault("EA");
 		EB = getOrDefault("EB");
 		EC = getOrDefault("EC");
@@ -791,7 +816,8 @@ public class LanguageHandler
 		LF = getOrDefault("LF");
 		LG = getOrDefault("LG");
 		LH = getOrDefault("LH");
-		MA = getOrDefault("MA");
+		LI = getOrDefault("LI");
+		LJ = getOrDefault("LJ");
 
 		save();
 	}
