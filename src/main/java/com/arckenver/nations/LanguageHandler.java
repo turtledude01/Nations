@@ -6,6 +6,7 @@ import java.io.IOException;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
+import ninja.leaping.configurate.objectmapping.Setting;
 
 public class LanguageHandler
 {
@@ -261,6 +262,10 @@ public class LanguageHandler
 	public static String LH;
 	public static String LI;
 	public static String LJ;
+
+	//my custom commands lang handlers
+	public static String ZZZ;
+	public static String ZZX;
 	
 	private static File languageFile;
 	private static ConfigurationLoader<CommentedConfigurationNode> languageManager;
@@ -553,6 +558,10 @@ public class LanguageHandler
 		defaultLanguage.getNode("LH").setValue("manage extra spawns using player name");
 		defaultLanguage.getNode("LI").setValue("unclaims for admin nation");
 		defaultLanguage.getNode("LJ").setValue("{PLAYER} made zone {ZONE} not for sale");
+
+		//My custom langs
+		defaultLanguage.getNode("ZZZ").setValue("nation tag must be 2-4 letters or numbers");
+		defaultLanguage.getNode("ZZX").setValue("Nation tag set to ");
 	}
 	
 	public static void load()
