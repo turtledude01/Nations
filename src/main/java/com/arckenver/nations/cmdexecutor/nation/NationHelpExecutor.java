@@ -3,6 +3,7 @@ package com.arckenver.nations.cmdexecutor.nation;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.sun.java.accessibility.util.java.awt.TextComponentTranslator;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
@@ -23,6 +24,7 @@ public class NationHelpExecutor implements CommandExecutor
 		contents.add(Text.of(TextColors.GOLD, "/n info [nation]", TextColors.GRAY, " - ", TextColors.YELLOW, LanguageHandler.AA));
 		contents.add(Text.of(TextColors.GOLD, "/n here", TextColors.GRAY, " - ", TextColors.YELLOW, LanguageHandler.AB));
 		contents.add(Text.of(TextColors.GOLD, "/n cost", TextColors.GRAY, " - ", TextColors.YELLOW, LanguageHandler.DY));
+		contents.add(Text.of(TextColors.GOLD, "/n mark", TextColors.GRAY, " - ", TextColors.YELLOW, LanguageHandler.DY));
 		contents.add(Text.of(TextColors.GOLD, "/n list", TextColors.GRAY, " - ", TextColors.YELLOW, LanguageHandler.AC));
 		contents.add(Text.of(TextColors.GOLD, "/n create <name>", TextColors.GRAY, " - ", TextColors.YELLOW, LanguageHandler.AD));
 		contents.add(Text.of(TextColors.GOLD, "/n deposit <amount>", TextColors.GRAY, " - ", TextColors.YELLOW, LanguageHandler.AE));
@@ -47,6 +49,7 @@ public class NationHelpExecutor implements CommandExecutor
 		contents.add(Text.of(TextColors.GOLD, "/n setspawn <name>", TextColors.GRAY, " - ", TextColors.YELLOW, LanguageHandler.AR));
 		contents.add(Text.of(TextColors.GOLD, "/n delspawn <name>", TextColors.GRAY, " - ", TextColors.YELLOW, LanguageHandler.AS));
 		contents.add(Text.of(TextColors.GOLD, "/n buyextra <amount>", TextColors.GRAY, " - ", TextColors.YELLOW, LanguageHandler.AT));
+		contents.add(Text.of(TextColors.GOLD, "/n tag <tag>", TextColors.GRAY, " - ", TextColors.YELLOW, LanguageHandler.HAA));
 
 		PaginationList.builder()
 		.title(Text.of(TextColors.GOLD, "{ ", TextColors.YELLOW, "/nation", TextColors.GOLD, " }"))

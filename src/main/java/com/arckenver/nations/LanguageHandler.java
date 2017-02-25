@@ -262,10 +262,11 @@ public class LanguageHandler
 	public static String LH;
 	public static String LI;
 	public static String LJ;
+	public static String LK;
 
-	//my custom commands lang handlers
-	public static String ZZZ;
-	public static String ZZX;
+	public static String HAA;
+	public static String HAB;
+	public static String HAC;
 	
 	private static File languageFile;
 	private static ConfigurationLoader<CommentedConfigurationNode> languageManager;
@@ -506,6 +507,11 @@ public class LanguageHandler
 		defaultLanguage.getNode("HU").setValue("Teleport will start in 10 seconds");
 		defaultLanguage.getNode("HV").setValue("No spawn named 'home' found. Make one with /n setspawn home");
 		defaultLanguage.getNode("HW").setValue("if you have a spawn named 'home', tp to it");
+		//TODO these are old and need to be updated
+		defaultLanguage.getNode("HAA").setValue("Change Nation tag");
+		defaultLanguage.getNode("HAB").setValue("Nation tag set to ");
+		defaultLanguage.getNode("HAC").setValue("Tag must be 2 to 4 letters or numbers");
+		//
 		defaultLanguage.getNode("HX").setValue("Unnamed");
 		defaultLanguage.getNode("HY").setValue("manage extra blocks");
 		defaultLanguage.getNode("HZ").setValue("manage extra blocks using player name");
@@ -558,10 +564,8 @@ public class LanguageHandler
 		defaultLanguage.getNode("LH").setValue("manage extra spawns using player name");
 		defaultLanguage.getNode("LI").setValue("unclaims for admin nation");
 		defaultLanguage.getNode("LJ").setValue("{PLAYER} made zone {ZONE} not for sale");
+		defaultLanguage.getNode("LK").setValue("display nations and zones");
 
-		//My custom langs
-		defaultLanguage.getNode("ZZZ").setValue("nation tag must be 2-4 letters or numbers");
-		defaultLanguage.getNode("ZZX").setValue("Nation tag set to ");
 	}
 	
 	public static void load()
@@ -818,6 +822,10 @@ public class LanguageHandler
 		LH = getOrDefault("LH");
 		LI = getOrDefault("LI");
 		LJ = getOrDefault("LJ");
+		LK = getOrDefault("LK");
+		HAA = getOrDefault("HAA");
+		HAB = getOrDefault("HAB");
+		HAC = getOrDefault("HAC");
 
 		save();
 	}

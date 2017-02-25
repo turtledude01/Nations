@@ -49,6 +49,7 @@ import com.arckenver.nations.cmdexecutor.nation.NationJoinExecutor;
 import com.arckenver.nations.cmdexecutor.nation.NationKickExecutor;
 import com.arckenver.nations.cmdexecutor.nation.NationLeaveExecutor;
 import com.arckenver.nations.cmdexecutor.nation.NationListExecutor;
+import com.arckenver.nations.cmdexecutor.nation.NationMarkExecutor;
 import com.arckenver.nations.cmdexecutor.nation.NationMinisterExecutor;
 import com.arckenver.nations.cmdexecutor.nation.NationPermExecutor;
 import com.arckenver.nations.cmdexecutor.nation.NationResignExecutor;
@@ -114,7 +115,7 @@ import com.arckenver.nations.task.TaxesCollectRunnable;
 import com.google.common.collect.ImmutableMap;
 import com.google.inject.Inject;
 
-@Plugin(id = "nations", name = "Nations", version = "2.3", authors={"Arckenver"}, description = "A towny-like worldguard-like zone managment plugin.", url="https://github.com/Arckenver/Nations")
+@Plugin(id = "nations", name = "Nations", version = "2.4", authors={"Arckenver"}, description = "A towny-like worldguard-like zone managment plugin.", url="https://github.com/Arckenver/Nations")
 public class NationsPlugin
 {
 	private File rootDir;
@@ -609,6 +610,13 @@ public class NationsPlugin
 						GenericArguments.optional(GenericArguments.string(Text.of("name"))))
 				.executor(new NationVisitExecutor())
 				.build();
+		
+		CommandSpec nationMarkCmd = CommandSpec.builder()
+				.description(Text.of(""))
+				.permission("nations.command.nation.mark")
+				.arguments()
+				.executor(new NationMarkExecutor())
+				.build();
 
 		CommandSpec nationCmd = CommandSpec.builder()
 				.description(Text.of(""))
@@ -643,6 +651,8 @@ public class NationsPlugin
 				.child(nationChatCmd, "chat", "c")
 				.child(nationVisitCmd, "visit")
 				.child(nationTagCmd, "tag")
+				.child(nationMarkCmd, "mark", "limit", "show", "display", "see", "boundaries")
+
 				.build();
 
 		CommandSpec zoneInfoCmd = CommandSpec.builder()

@@ -53,7 +53,7 @@ public class ZoneBuyExecutor implements CommandExecutor
 				return CommandResult.success();
 			}
 			UUID oldOwner = zone.getOwner();
-			
+
 			if (NationsPlugin.getEcoService() == null)
 			{
 				src.sendMessage(Text.of(TextColors.RED, LanguageHandler.DC));

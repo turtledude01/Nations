@@ -12,7 +12,7 @@ public class NationadminForceupkeepExecutor implements CommandExecutor
 	@Override
 	public CommandResult execute(CommandSource src, CommandContext ctx) throws CommandException
 	{
-		new TaxesCollectRunnable().run();		
+		new TaxesCollectRunnable().run();
 		return CommandResult.success();
 	}
 }

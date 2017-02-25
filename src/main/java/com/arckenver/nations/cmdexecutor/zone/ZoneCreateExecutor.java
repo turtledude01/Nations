@@ -43,6 +43,7 @@ public class ZoneCreateExecutor implements CommandExecutor
 			{
 				zoneName = ctx.<String>getOne("name").get();
 			}
+			if (!zoneName.matches("[a-zA-Z0-9\\._-]{1,30}"))
 			if (zoneName != null && !zoneName.matches("[\\p{Alnum}\\p{IsIdeographic}\\p{IsLetter}\"_\"]*{1,30}"))
 			{
 				src.sendMessage(Text.of(TextColors.RED, LanguageHandler.FY

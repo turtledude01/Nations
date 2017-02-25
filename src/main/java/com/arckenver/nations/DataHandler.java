@@ -8,13 +8,16 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Hashtable;
-import java.util.Map.Entry;
+import java.util.concurrent.TimeUnit;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.spongepowered.api.Sponge;
+import org.spongepowered.api.effect.particle.ParticleEffect;
+import org.spongepowered.api.effect.particle.ParticleTypes;
 import org.spongepowered.api.entity.living.player.Player;
+import org.spongepowered.api.scheduler.Task;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.channel.MessageChannel;
 import org.spongepowered.api.world.Location;
@@ -29,6 +32,7 @@ import com.arckenver.nations.object.Zone;
 import com.arckenver.nations.serializer.NationDeserializer;
 import com.arckenver.nations.serializer.NationSerializer;
 import com.flowpowered.math.vector.Vector2i;
+import com.flowpowered.math.vector.Vector3d;
 import com.google.common.math.IntMath;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -44,6 +48,7 @@ public class DataHandler
 	private static HashMap<UUID, Zone> lastZoneWalkedOn;
 	private static Hashtable<UUID, Point> firstPoints;
 	private static Hashtable<UUID, Point> secondPoints;
+	private static Hashtable<UUID, UUID> markJobs;
 	private static ArrayList<Request> inviteRequests;
 	private static ArrayList<Request> joinRequests;
 	private static NationMessageChannel spyChannel;
@@ -84,6 +89,7 @@ public class DataHandler
 		lastZoneWalkedOn = new HashMap<UUID, Zone>();
 		firstPoints = new Hashtable<UUID, Point>();
 		secondPoints = new Hashtable<UUID, Point>();
+		markJobs = new Hashtable<UUID, UUID>();
 		inviteRequests = new ArrayList<Request>();
 		joinRequests = new ArrayList<Request>();
 		spyChannel = new NationMessageChannel();
@@ -97,7 +103,7 @@ public class DataHandler
 		}
 
 	}
-	
+
 	public static NationMessageChannel getSpyChannel()
 	{
 		return spyChannel;
@@ -134,20 +140,32 @@ public class DataHandler
 		{
 			return null;
 		}
-		for (Entry<Vector2i, ArrayList<Nation>> e : worldChunks.get(loc.getExtent().getUniqueId()).entrySet())
+		Vector2i area = new Vector2i(IntMath.divide(loc.getBlockX(), 16, RoundingMode.FLOOR), IntMath.divide(loc.getBlockZ(), 16, RoundingMode.FLOOR));
+		if (!worldChunks.get(loc.getExtent().getUniqueId()).containsKey(area))
 		{
-			if (e.getKey().equals(new Vector2i(IntMath.divide(loc.getBlockX(), 16, RoundingMode.FLOOR), IntMath.divide(loc.getBlockZ(), 16, RoundingMode.FLOOR))))
+			return null;
+		}
+		for (Nation nation : worldChunks.get(loc.getExtent().getUniqueId()).get(area))
+		{
+			if (nation.getRegion().isInside(loc))
 			{
-				for (Nation nation : e.getValue())
-				{
-					if (nation.getRegion().isInside(loc))
-					{
-						return nation;
-					}
-				}
-				return null;
+				return nation;
 			}
 		}
+//		for (Entry<Vector2i, ArrayList<Nation>> e : worldChunks.get(loc.getExtent().getUniqueId()).entrySet())
+//		{
+//			if (e.getKey().equals(new Vector2i(IntMath.divide(loc.getBlockX(), 16, RoundingMode.FLOOR), IntMath.divide(loc.getBlockZ(), 16, RoundingMode.FLOOR))))
+//			{
+//				for (Nation nation : e.getValue())
+//				{
+//					if (nation.getRegion().isInside(loc))
+//					{
+//						return nation;
+//					}
+//				}
+//				return null;
+//			}
+//		}
 		return null;
 	}
 
@@ -403,6 +421,63 @@ public class DataHandler
 	public static void setLastZoneWalkedOn(UUID uuid, Zone zone)
 	{
 		lastZoneWalkedOn.put(uuid, zone);
+	}
+
+	// markJobs
+
+	public static void toggleMarkJob(Player player)
+	{
+		if (markJobs.containsKey(player.getUniqueId()))
+		{
+			Sponge.getScheduler().getTaskById(markJobs.get(player.getUniqueId())).ifPresent(task -> {task.cancel();});
+			markJobs.remove(player.getUniqueId());
+			return;
+		}
+		ParticleEffect nationParticule = ParticleEffect.builder().type(ParticleTypes.DRAGON_BREATH).quantity(1).build();
+		ParticleEffect zoneParticule = ParticleEffect.builder().type(ParticleTypes.HAPPY_VILLAGER).quantity(1).build();
+		Task t = Sponge.getScheduler()
+				.createTaskBuilder()
+				.execute(task -> {
+					if (!player.isOnline())
+					{
+						task.cancel();
+						markJobs.remove(player.getUniqueId());
+						return;
+					}
+					Location<World> loc = player.getLocation();
+					loc = loc.sub(32, 0, 32);
+					for (int x = 0; x < 64; ++x)
+					{
+						for (int y = 0; y < 64; ++y)
+						{
+							Nation nation = DataHandler.getNation(loc);
+							if (nation != null)
+							{
+								Vector3d pos = loc.getPosition().sub(0, 4, 0);
+
+								if (nation.getZone(loc) != null)
+								{
+									for (int h = 0; h < 10; h++)
+										player.spawnParticles(zoneParticule, pos.add(0, h, 0), 50);
+								}
+								else
+								{
+									for (int h = 0; h < 10; h++)
+										player.spawnParticles(nationParticule, pos.add(0, h, 0), 50);
+								}
+
+							}
+							loc = loc.add(0,0,1);
+						}
+						loc = loc.add(1,0,0);
+						loc = loc.sub(0,0,64);
+					}
+				})
+				.delay(1, TimeUnit.SECONDS)
+				.interval(1, TimeUnit.SECONDS)
+				.async()
+				.submit(NationsPlugin.getInstance());
+		markJobs.put(player.getUniqueId(), t.getUniqueId());
 	}
 
 	// points
