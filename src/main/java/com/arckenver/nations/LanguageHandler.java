@@ -262,6 +262,10 @@ public class LanguageHandler
 	public static String LI;
 	public static String LJ;
 	public static String LK;
+
+	public static String HAA;
+	public static String HAB;
+	public static String HAC;
 	
 	private static File languageFile;
 	private static ConfigurationLoader<CommentedConfigurationNode> languageManager;
@@ -506,6 +510,7 @@ public class LanguageHandler
 		defaultLanguage.getNode("HAA").setValue("Change Nation tag");
 		defaultLanguage.getNode("HAB").setValue("Nation tag set to ");
 		defaultLanguage.getNode("HAC").setValue("Tag must be 2 to 4 letters or numbers");
+		//
 		defaultLanguage.getNode("HX").setValue("Unnamed");
 		defaultLanguage.getNode("HY").setValue("manage extra blocks");
 		defaultLanguage.getNode("HZ").setValue("manage extra blocks using player name");
@@ -816,6 +821,9 @@ public class LanguageHandler
 		LI = getOrDefault("LI");
 		LJ = getOrDefault("LJ");
 		LK = getOrDefault("LK");
+		HAA = getOrDefault("HAA");
+		HAB = getOrDefault("HAB");
+		HAC = getOrDefault("HAC");
 
 		save();
 	}
