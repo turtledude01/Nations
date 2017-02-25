@@ -39,6 +39,7 @@ public class Nation
 	private Hashtable<String, Boolean> flags;
 	private Hashtable<UUID, Zone> zones;
 	private int extras;
+	private int extraspawns;
 	private double taxes;
 	private String tag;
 	
@@ -80,6 +81,7 @@ public class Nation
 		}};
 		this.zones = new Hashtable<UUID, Zone>();
 		this.extras = 0;
+		this.extraspawns = 0;
 		this.taxes = ConfigHandler.getNode("nations", "defaultTaxes").getDouble();
 	}
 
@@ -94,6 +96,11 @@ public class Nation
 	}
 
 	public String getName()
+	{
+		return name.replace("_", " ");
+	}
+
+	public String getRealName()
 	{
 		return name;
 	}
@@ -156,7 +163,35 @@ public class Nation
 	{
 		return spawns.size();
 	}
+	
+	public int getMaxSpawns()
+	{
+		return ConfigHandler.getNode("others", "maxNationSpawns").getInt() + extraspawns;
+	}
 
+	public int getExtraSpawns() {
+		return extraspawns;
+	}
+	
+	public void setExtraSpawns(int extraspawns)
+	{
+		this.extraspawns = extraspawns;
+		if (this.extraspawns < 0)
+			this.extraspawns = 0;
+	}
+
+	public void addExtraSpawns(int extraspawns)
+	{
+		this.extraspawns += extraspawns;
+	}
+
+	public void removeExtraSpawns(int extraspawns)
+	{
+		this.extraspawns -= extraspawns;
+		if (this.extraspawns < 0)
+			this.extraspawns = 0;
+	}
+	
 	public Region getRegion()
 	{
 		return region;
@@ -316,18 +351,6 @@ public class Nation
 		return zones;
 	}
 	
-	public Zone getZone(String name)
-	{
-		for (Zone zone : zones.values())
-		{
-			if (zone.getName().equalsIgnoreCase(name))
-			{
-				return zone;
-			}
-		}
-		return null;
-	}
-	
 	public Zone getZone(Location<World> loc)
 	{
 		Vector2i p = new Vector2i(loc.getBlockX(), loc.getBlockZ());
@@ -359,11 +382,20 @@ public class Nation
 	public void setExtras(int extras)
 	{
 		this.extras = extras;
+		if (this.extras < 0)
+			this.extras = 0;
 	}
 
 	public void addExtras(int extras)
 	{
 		this.extras += extras;
+	}
+
+	public void removeExtras(int extras)
+	{
+		this.extras -= extras;
+		if (this.extras < 0)
+			this.extras = 0;
 	}
 
 	public int maxBlockSize()
@@ -375,4 +407,5 @@ public class Nation
 	{
 		return channel;
 	}
+
 }

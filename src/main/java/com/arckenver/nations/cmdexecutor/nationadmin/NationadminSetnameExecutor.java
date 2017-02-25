@@ -55,7 +55,7 @@ public class NationadminSetnameExecutor implements CommandExecutor
 		nation.setName(newName);
 		DataHandler.saveNation(nation.getUUID());
 		MessageChannel.TO_ALL.send(Text.of(TextColors.RED,
-				LanguageHandler.FW.replaceAll("\\{OLDNAME\\}", oldName).replaceAll("\\{NEWNAME\\}", newName)));
+				LanguageHandler.FW.replaceAll("\\{OLDNAME\\}", oldName).replaceAll("\\{NEWNAME\\}", nation.getName())));
 		return CommandResult.success();
 	}
 }

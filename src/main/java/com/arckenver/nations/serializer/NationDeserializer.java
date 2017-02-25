@@ -61,7 +61,9 @@ public class NationDeserializer implements JsonDeserializer<Nation>
 			{
 				JsonObject zoneObj = e.getAsJsonObject();
 				UUID zoneUUID = UUID.fromString(zoneObj.get("uuid").getAsString());
-				String zoneName = zoneObj.get("name").getAsString();
+				String zoneName = null;
+				if (zoneObj.has("name"))
+					zoneName = zoneObj.get("name").getAsString();
 				
 				JsonObject rectObj = zoneObj.get("rect").getAsJsonObject();
 				Rect rect = new Rect(
@@ -111,7 +113,10 @@ public class NationDeserializer implements JsonDeserializer<Nation>
 			}
 			if (obj.has("taxes"))
 				nation.setTaxes(obj.get("taxes").getAsDouble());
-			nation.addExtras(obj.get("extras").getAsInt());
+			if (obj.has("extras"))
+				nation.setExtras(obj.get("extras").getAsInt());
+			if (obj.has("extraspawns"))
+			 nation.setExtraSpawns(obj.get("extraspawns").getAsInt());
 			for (Entry<String, JsonElement> e : obj.get("spawns").getAsJsonObject().entrySet())
 			{
 				JsonObject spawnObj = e.getValue().getAsJsonObject();

@@ -20,12 +20,11 @@ public class ZoneRenameExecutor implements CommandExecutor
 	{
 		if (src instanceof Player)
 		{
-			if (!ctx.<String>getOne("name").isPresent())
+			String zoneName = null;
+			if (ctx.<String>getOne("name").isPresent())
 			{
-				src.sendMessage(Text.of(TextColors.RED, "/z rename <name>"));
-				return CommandResult.success();
+				zoneName = ctx.<String>getOne("name").get();
 			}
-			String zoneName = ctx.<String>getOne("name").get();
 			if (!zoneName.matches("[a-zA-Z0-9\\._-]{1,30}"))
 			{
 				src.sendMessage(Text.of(TextColors.RED, LanguageHandler.FY
@@ -51,17 +50,20 @@ public class ZoneRenameExecutor implements CommandExecutor
 				src.sendMessage(Text.of(TextColors.RED, LanguageHandler.GV));
 				return CommandResult.success();
 			}
-			for (Zone zone : nation.getZones().values())
+			if (zoneName != null)
 			{
-				if (zone.getName().equalsIgnoreCase(zoneName))
+				for (Zone zone : nation.getZones().values())
 				{
-					src.sendMessage(Text.of(TextColors.RED, LanguageHandler.GR));
-					return CommandResult.success();
+					if (zone.isNamed() && zone.getRealName().equalsIgnoreCase(zoneName))
+					{
+						src.sendMessage(Text.of(TextColors.RED, LanguageHandler.GR));
+						return CommandResult.success();
+					}
 				}
 			}
 			currentZone.setName(zoneName);
 			DataHandler.saveNation(nation.getUUID());
-			src.sendMessage(Text.of(TextColors.GREEN, LanguageHandler.HS.replaceAll("\\{ZONE\\}", zoneName)));
+			src.sendMessage(Text.of(TextColors.GREEN, LanguageHandler.HS.replaceAll("\\{ZONE\\}", currentZone.getName())));
 		}
 		else
 		{

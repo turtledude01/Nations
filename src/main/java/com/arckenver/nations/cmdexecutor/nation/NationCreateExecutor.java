@@ -119,8 +119,8 @@ public class NationCreateExecutor implements CommandExecutor
 			optNationAccount.get().setBalance(NationsPlugin.getEcoService().getDefaultCurrency(), BigDecimal.ZERO, NationsPlugin.getCause());
 			DataHandler.addNation(nation);
 			DataHandler.addToWorldChunks(nation);
-			MessageChannel.TO_ALL.send(Text.of(TextColors.AQUA, LanguageHandler.EP.replaceAll("\\{PLAYER\\}", player.getName()).replaceAll("\\{NATION\\}", nationName)));
-			src.sendMessage(Text.of(TextColors.GREEN, LanguageHandler.EQ.replaceAll("\\{NATION\\}", nationName)));
+			MessageChannel.TO_ALL.send(Text.of(TextColors.AQUA, LanguageHandler.EP.replaceAll("\\{PLAYER\\}", player.getName()).replaceAll("\\{NATION\\}", nation.getName())));
+			src.sendMessage(Text.of(TextColors.GREEN, LanguageHandler.EQ.replaceAll("\\{NATION\\}", nation.getName())));
 		}
 		else
 		{

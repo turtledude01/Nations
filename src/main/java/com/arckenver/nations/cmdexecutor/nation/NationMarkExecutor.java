@@ -11,39 +11,19 @@ import org.spongepowered.api.text.format.TextColors;
 
 import com.arckenver.nations.DataHandler;
 import com.arckenver.nations.LanguageHandler;
-import com.arckenver.nations.Utils;
-import com.arckenver.nations.object.Nation;
 
-public class NationExecutor implements CommandExecutor
+public class NationMarkExecutor implements CommandExecutor
 {
 	public CommandResult execute(CommandSource src, CommandContext ctx) throws CommandException
 	{
-		int clicker = Utils.CLICKER_NONE;
-		Nation nation;
 		if (src instanceof Player)
 		{
-			Player player = (Player) src;
-			nation = DataHandler.getNationOfPlayer(player.getUniqueId());
-			if (nation == null)
-			{
-				src.sendMessage(Text.of(TextColors.RED, LanguageHandler.CI));
-				return CommandResult.success();
-			}
-			if (nation.isStaff(player.getUniqueId()))
-			{
-				clicker = Utils.CLICKER_DEFAULT;
-			}
+			DataHandler.toggleMarkJob((Player) src);
 		}
 		else
 		{
 			src.sendMessage(Text.of(TextColors.RED, LanguageHandler.CA));
-			return CommandResult.success();
 		}
-		if (clicker == Utils.CLICKER_NONE && src.hasPermission("nations.command.nationadmin"))
-		{
-			clicker = Utils.CLICKER_ADMIN;
-		}
-		src.sendMessage(Utils.formatNationDescription(nation, clicker));
 		return CommandResult.success();
 	}
 }
