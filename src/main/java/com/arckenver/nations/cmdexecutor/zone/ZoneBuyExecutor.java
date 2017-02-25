@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 import java.util.Optional;
 import java.util.UUID;
 
-import com.arckenver.nations.*;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
@@ -19,6 +18,10 @@ import org.spongepowered.api.service.economy.transaction.TransactionResult;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.format.TextColors;
 
+import com.arckenver.nations.DataHandler;
+import com.arckenver.nations.LanguageHandler;
+import com.arckenver.nations.NationsPlugin;
+import com.arckenver.nations.Utils;
 import com.arckenver.nations.object.Nation;
 import com.arckenver.nations.object.Zone;
 
@@ -35,16 +38,16 @@ public class ZoneBuyExecutor implements CommandExecutor
 				src.sendMessage(Text.of(TextColors.RED, LanguageHandler.DQ));
 				return CommandResult.success();
 			}
-			Nation playerNation = DataHandler.getNationOfPlayer(player.getUniqueId());
-			if (!nation.isAdmin() && !nation.getUUID().equals(playerNation.getUUID()))
-			{
-				src.sendMessage(Text.of(TextColors.RED, LanguageHandler.DR));
-				return CommandResult.success();
-			}
 			Zone zone = nation.getZone(player.getLocation());
 			if (zone == null)
 			{
 				src.sendMessage(Text.of(TextColors.RED, LanguageHandler.GD));
+				return CommandResult.success();
+			}
+			Nation playerNation = DataHandler.getNationOfPlayer(player.getUniqueId());
+			if (!nation.isAdmin() && !nation.getUUID().equals(playerNation.getUUID()) && !zone.getFlag("public"))
+			{
+				src.sendMessage(Text.of(TextColors.RED, LanguageHandler.DR));
 				return CommandResult.success();
 			}
 			if (!zone.isForSale())
@@ -53,7 +56,7 @@ public class ZoneBuyExecutor implements CommandExecutor
 				return CommandResult.success();
 			}
 			UUID oldOwner = zone.getOwner();
-			
+
 			if (NationsPlugin.getEcoService() == null)
 			{
 				src.sendMessage(Text.of(TextColors.RED, LanguageHandler.DC));
@@ -66,17 +69,7 @@ public class ZoneBuyExecutor implements CommandExecutor
 				return CommandResult.success();
 			}
 			Account receiver;
-			if (nation.isAdmin() && oldOwner == null && ConfigHandler.getNode("economy", "serverAccount").getString() != null)
-			{
-				Optional<Account> optReceiver = NationsPlugin.getEcoService().getOrCreateAccount(ConfigHandler.getNode("economy", "serverAccount").getString());
-				if (!optReceiver.isPresent())
-				{
-					src.sendMessage(Text.of(TextColors.RED, LanguageHandler.DD));
-					return CommandResult.success();
-				}
-				receiver = optReceiver.get();
-			}
-			else if (oldOwner == null)
+			if (oldOwner == null)
 			{
 				Optional<Account> optReceiver = NationsPlugin.getEcoService().getOrCreateAccount("nation-" + nation.getUUID());
 				if (!optReceiver.isPresent())
@@ -113,8 +106,6 @@ public class ZoneBuyExecutor implements CommandExecutor
 			}
 			zone.setOwner(player.getUniqueId());
 			zone.setPrice(null);
-			if (nation.isAdmin())
-				zone.setName(player.getName());
 			DataHandler.saveNation(nation.getUUID());
 			src.sendMessage(Text.of(TextColors.GREEN, LanguageHandler.GU.replaceAll("\\{ZONE\\}", zone.getName())));
 			if (oldOwner != null)
