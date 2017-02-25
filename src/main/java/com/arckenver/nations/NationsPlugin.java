@@ -652,6 +652,7 @@ public class NationsPlugin
 				.child(nationVisitCmd, "visit")
 				.child(nationTagCmd, "tag")
 				.child(nationMarkCmd, "mark", "limit", "show", "display", "see", "boundaries")
+
 				.build();
 
 		CommandSpec zoneInfoCmd = CommandSpec.builder()
