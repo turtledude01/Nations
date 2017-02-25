@@ -94,6 +94,20 @@ public class TaxesCollectRunnable implements Runnable
 			{
 				NationsPlugin.getLogger().error("Error while taking upkeep from nation " + nation.getName());
 			}
+			else
+			{
+				if (ConfigHandler.getNode("economy", "serverAccount").getString() != null)
+				{
+					String serverAccount = ConfigHandler.getNode("economy", "serverAccount").getString();
+					Optional<Account> optServerAccount = NationsPlugin.getEcoService().getOrCreateAccount(serverAccount);
+					TransactionResult resultServer = optServerAccount.get().deposit(NationsPlugin.getEcoService().getDefaultCurrency(), upkeep, NationsPlugin.getCause());
+
+					if (resultServer.getResult() != ResultType.SUCCESS)
+					{
+						NationsPlugin.getLogger().error("Error Giving money to SERVER account");
+					}
+				}
+			}
 		}
 		for (UUID uuid : nationsToRemove)
 		{

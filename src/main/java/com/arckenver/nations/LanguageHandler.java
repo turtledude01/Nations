@@ -6,6 +6,7 @@ import java.io.IOException;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
 import ninja.leaping.configurate.loader.ConfigurationLoader;
+import ninja.leaping.configurate.objectmapping.Setting;
 
 public class LanguageHandler
 {
@@ -564,6 +565,7 @@ public class LanguageHandler
 		defaultLanguage.getNode("LI").setValue("unclaims for admin nation");
 		defaultLanguage.getNode("LJ").setValue("{PLAYER} made zone {ZONE} not for sale");
 		defaultLanguage.getNode("LK").setValue("display nations and zones");
+
 	}
 	
 	public static void load()
